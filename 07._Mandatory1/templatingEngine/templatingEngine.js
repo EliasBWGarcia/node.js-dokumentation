@@ -1,7 +1,12 @@
 import fs from "fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-export function readPage(path) {
-    return fs.readFileSync(path, "utf-8");
+const templatingDirectory = path.dirname(fileURLToPath(import.meta.url));
+const appDirectory = path.resolve(templatingDirectory, "..");
+
+export function readPage(filePath) {
+    return fs.readFileSync(path.join(appDirectory, filePath), "utf-8");
 }
 
 export function constructPage(page, options = {}) {

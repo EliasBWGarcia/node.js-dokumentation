@@ -1,10 +1,13 @@
 import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url"; // taget fra Vercel troubleshooting af deployment
 import { frontpagePage, javascriptPage, nodeExpressPage, expressHttpUrlsPage, restApiPage, frontendPage, modulesStaticFilesPage, ssrPage } from "./templatingEngine/pages.js";
 
 const app = express();
 const PORT = 8080;
+const appDirectory = path.dirname(fileURLToPath(import.meta.url)); // taget fra Vercel troubleshooting af deployment
 
-app.use(express.static("public"));
+app.use(express.static(path.join(appDirectory, "public")));
 
 app.get("/", (req, res) => {
     res.send(frontpagePage);
@@ -38,8 +41,7 @@ app.get("/ssr", (req, res) => {
     res.send(ssrPage);
 });
 
-// Vercel invokes the exported Express app as a serverless function.
-// Keep a normal listener when the app is run locally with `npm start`.
+// nedenstående er noget kode taget fra Vercel troubleshooting af deployment.
 if (process.env.NODE_ENV !== "production") {
     app.listen(PORT, (error) => {
         if (error) {
