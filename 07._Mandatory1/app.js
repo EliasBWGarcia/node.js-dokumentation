@@ -38,10 +38,16 @@ app.get("/ssr", (req, res) => {
     res.send(ssrPage);
 });
 
-app.listen(PORT, (error) => {
-    if (error) {
-        console.log(error);
-        return;
-    }
-    console.log("Server is running on port", PORT);
-});
+// Vercel invokes the exported Express app as a serverless function.
+// Keep a normal listener when the app is run locally with `npm start`.
+if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, (error) => {
+        if (error) {
+            console.log(error);
+            return;
+        }
+        console.log("Server is running on port", PORT);
+    });
+}
+
+export default app;
