@@ -5,4 +5,4 @@
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference brugt som reference. 
 - https://simplecss.org/ til css styling
 - https://www.w3schools.com/html/html5_semantic_elements.asp til genopfriskning af semantisk HTML
-- https://www.w3schools.com/html/html_computercode_elements.asp til at undgå at bruge screenshots af kode snippets. Så jeg har brugt <pre><code></code></pre> i stedet for. 
+- https://www.w3schools.com/html/html_computercode_elements.asp 
