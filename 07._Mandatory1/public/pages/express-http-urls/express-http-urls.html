@@ -1,0 +1,92 @@
+<article>
+    <h1>Express, HTTP og URLs</h1>
+    <ul>
+        <li><a href="#client-server-model">Client server modellen</a></li>
+        <li><a href="#express">Hvad er Express?</a></li>
+        <li><a href="#oprettelse-server">Hvordan opretter man en Express server?</a></li>
+        <li><a href="#routes-app.get">Routes og app.get()</a></li>
+        <li><a href="#url">Hvad består en url af?</a></li>
+    </ul>
+
+    <section id="client-server-model">
+        <h3>Client Server Model</h3>
+        <p>Nedenstående billeder beskriver kommunikationen mellem clienten og serveren. Clienten er browseren, som sender et request til serveren, når en bruger tilgår en url.</p>
+        <img src="/assets/images/Client-Server-Architecture.png" alt="">
+        <p>Serveren modtager et request fra clienten og sender et response tilbage. Det kan fx være en ny html side eller noget data i json format.</p>
+    </section>
+
+    <section id="express">
+        <h3>Hvad er Express?</h3>
+        <p>Express er et framework til Node.js. Det gør det muligt at arbejde med backend i JavaScript som ellers er et frontend sprog. Man kan oprette en servere og håndtere requests fra clienter. Express kommer med nogle funktioner som fx app.get() og er noget der bliver gennemgået nærmere senere i dokumentationen.</p>
+        <p>Express installeres som nævnt tidligere ved følgende kommando i terminalen:</p>
+        <pre><code>npm install express</code></pre>
+    </section>
+
+    <section id="oprettelse-server">
+        <h3>Hvordan opretter man en server med Express?</h3>
+        <p>Som det første, skal man importere Express. Man kan faktisk oprette en server på meget få linjer kode. Sådan her kan det se ud, hvis man bruger ESmodules:</p>
+        <pre><code>import express from "express"
+        const app = express()
+        const port = 8080
+
+        app.listen(PORT, () => {
+            console.log("appen kører på port", PORT)
+        })
+        </code></pre>
+        <p>App er Express serveren, og det er vigtigt at man også har en port, som serveren kan lytte på. Det sker gennem app.listen(), hvor man så kan tilgå localhost:8080 i dette eksempel</p>
+    </section>
+
+    <section id="routes-app.get">
+        <h3>Routes og App.get()</h3>
+        <p>Når clienten besøger en url, bestemmer routen hvad serveren skal returnere i response. Man bruger app.get() for at oprette en route, og så kan man håndtere GET requests.</p>
+        <p>Et eksempel på en route:</p>
+        <pre><code>app.get("/", (req, res) => {
+        res.send("eksempel")    
+        })</code></pre>
+        <p>Når clienten besøger / (som ofte er forsiden på en hjemmeside), så sender serveren teksten "eksempel" som response. Man kan også returnere andet end tekst. Det kan for eksempel være HTML eller data i JSON format.</p> 
+        <p>Et eksempel på når en route sender data i JSON format:</p>
+        <pre><code>app.get("/instruments", (req,res) => {
+        res.send({data: "guitar"})    
+        })
+        </code></pre>
+    </section>
+    <section id="url">
+        <h3>Hvad består en url af og hvad bruges den til?</h3>
+        <p>En URL bruges til at sende en request til en server.</p>
+        <pre><code>http://localhost:8080/beers/ipa/1</code></pre>
+        <p>Hvis vi tager udgangspunkt i ovenstående url, kan man dele den op i disse følgende dele:</p>
+        <dl>
+            <dt>http</dt>
+            <dd>Dette er protokollen</dd>
+
+            <dt>localhost</dt>
+            <dd>Dette er domænet, og i det her tilfælde er det localhost, som betyder at serveren kører på sin egen computer.</dd>
+
+            <dt>8080</dt>
+            <dd>Dette er porten, som serveren skal lytte på i app.listen()</dd>
+
+            <dt>/beers/ipa/1</dt>
+            <dd>Dette er en path, og ipa og 1 er værdier, som jeg forklarer nærmere om på nedenstående afsnit</dd>
+        </dl>
+
+        <h3>Path parameters</h3>
+        <p>
+            Dette er værdier, som er en del af pathen som nævnt. I koden markeres disse med et kolen som her:
+        </p>
+        <pre><code>app.get("/beers/:beerType/:amount", (req, res) => {
+        res.send(req.params)    
+        })</code></pre>
+        <p>
+            Hvis clienten sætter /beers/ipa/1 ind i urlen, vil req.params indeholde beerType med værdien "ipa" og amount med 1"".
+        </p>
+
+        <h3>Query parameters</h3>
+        <p>
+            Forskellen på path parameters og query parameters er ikke stor. De gør det samme, men det er to forskellige måder at skrive dem på. 
+            Forskellen ligger også i, hvordan værdierne står i url'en og hvordan man henter dem i koden. Et eksempel på en url fra undervisningen: 
+        </p>
+        <pre><code>/bars/forgottenItems?wallet=200&keys=my-house</code></pre>
+        <p>Her står værdierne efter ?, og de kan hentes med:</p>
+        <pre><code>req.query</code></pre>
+    </section>
+</article>

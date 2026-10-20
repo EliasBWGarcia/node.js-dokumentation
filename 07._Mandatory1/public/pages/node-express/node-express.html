@@ -1,0 +1,85 @@
+<article>
+    <h1>Node.js og NPM</h1>
+    
+    <h2>Underemner:</h2>
+    <ul>
+        <li><a href="#node.js">Node.js</a></li>
+        <li><a href="#kør-fil">Hvordan kører man en js fil?</a></li>
+        <li><a href="#npm">Hvad er NPM?</a></li>
+        <li><a href="#init-og-package">npm init & package.json</a></li>
+        <li><a href="#filer">node_modules, package-lock.json & gitignore</a></li>
+        <li><a href="#npm-scripts">Npm scripts og Nodemon</a></li>
+    </ul>
+
+    <section id="node.js">
+        <h3>Hvad er Node.js?</h3>
+        <p>
+            Med Node.js kan man køre JavaScript uden for browseren, hvor Javascript normalt kører og gør en hjemmeside interaktiv. Med Node.js kan man køre Javascript fra terminalen og bruge det til at lave server kode.
+            I undervisningen har vi brugt Node.js til at køre Express servere (læs mere om Express på knappen i navigationsmenuen).
+        </p>
+    </section>
+
+    <section id="kør-fil">
+        <h3>Hvordan kører man en js fil?</h3>
+        <p>I terminalen kører man:</p>
+        <pre><code>node navnPåFil.js</code></pre>
+    </section>
+
+    <section id="npm">
+        <h3>Hvad er NPM?</h3>
+        <p>
+            NPM er en package manager og står for Node Package Manager. Det bruges bl.a. til at installere pakker i et projekt. 
+        </p>
+
+        <p>
+            En pakke er noget kode, som andre har lavet, og som man kan tage i brug i sit eget projekt. I undervisningen har vi brugt Express pakken til at oprette vores servere.
+        </p>
+
+        <pre><code>npm install express</code></pre>
+        <p>Hvis man kører ovenstående kommando i sin terminal, installerer vores package manager pakken Express. Der bliver også opdateret i package.json, package-lock.json og mappen node_modules.</p>
+    </section>
+
+    <section id="init-og-package">
+        <h3>npm-init og package.json</h3>
+            <p>Package.json er en fil, der fortæller hvilken version projektet er på, og hvilke dependencies/pakker projektet bruger. Når man installerer en pakke med npm install i terminalen, så bliver pakken automatisk tilføjet under dependencies i package.json.
+                Man kan oprette denne fil ved at skrive følgende i terminalen:
+        </p> <!-- GEM TIIL SIDEN OM MODULER: Hvis man har type: "module" betyder det at projektet bruger ES modules, så man kan bruge import og export. I commonJS bruger man require for at importere. 
+            Et eksempel på hvordan en package.json fil kan se ud:-->
+        <pre><code>npm init</code></pre>
+        <p>Her bliver der stillet nogle spørgsmål om projektet, hvor svarene automatisk kommer ind i package.json. Man kan dog også skrive oplysningerne ind i filen selv. Sådan kan en package.json fil se ud:</p>
+        <pre><code>{"name": "mandatory-1-documentation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "start-dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"}
+    }</code></pre>
+        <p>Der sker også mere, når man kører npm install i terminalen, og det bliver nævnt i næste underemne.</p>
+    </section>
+
+    <section id="filer">
+        <h3>Node_modules, package-lock.json & gitignore</h3>
+        <p>Når man skriver npm install i terminalen, bliver der oprettet en mappe, der hedder node_modules. 
+            Den indeholder alle de pakker, projektet bruger. Mappen kan blive rigtig stor, og derfor pusher man det ikke til Github og node_modules bliver lagt i gitignore. 
+            Alle de oplysningerne står allerede i package.json og package-lock.json (fil som fortæller hvilke versioner pakkerne har), så en anden udvikler kan bare hente projektet ned og køre npm install i terminalen og installere dependencies/pakkerne på ny. 
+        </p>
+    </section>
+
+    <section id="npm-scripts">
+        <h3>Npm scripts og Nodemon</h3>
+        <p>Et npm script står i package.json og en slags genvej til en kommando i terminalen. Man kan også oprette sine egne. Et eksempel på scripts i package.json i dette projekt er følgende:</p>
+        <pre><code>"scripts": {
+    "start": "node app.js",
+    "start-dev": "nodemon app.js"
+  }</code></pre>
+  <p>På ovenstående eksempel, kan vi se at der er to scripts i package.json. Hvis vi skriver npm start i terminalen, bliver kommandoen "node app.js" kørt. Man skal dog skrive npm run start-dev for at udføre nodemon scriptet, da dette ikke et særligt keyword i node.js, som npm start er.</p>
+  <p>Ift. Nodemon bliver det brugt til at udvikle et projekt undervejs. Det er smart, fordi at Nodemon altid genstarter Node.js serveren, når man gemmer en ændring. Så slipper man for at stoppe og starte serveren hver gang, man har lavet en ændring.</p>
+    </section>
+</article>

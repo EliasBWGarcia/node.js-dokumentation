@@ -1,0 +1,85 @@
+<article>
+    <h1>SSR</h1>
+    <ul>
+        <li><a href="#ssr">Hvad er Server Side Rendering?</a></li>
+        <li><a href="ssr-vs-csr">SSR VS Client Side Rendering</a></li>
+        <li><a href="cdn">CDN VS lokale filer</a></li>
+
+    </ul>
+    <section id="ssr">
+        <h3>Hvad er ssr?</h3>
+        <p>
+            ssr står for Server Side Rendering. Det betyder, at serveren konstruerer HTML siden, før jeg bliver sendt afsted til browseren.
+        </p>
+        <p>
+            I dette projekt bruger vi serveren til at hente headeren, footeren og selve inholdet fra den side, clienten klikker på. Derefter samler serveren det til en html side og sender det som et response.
+        </p>
+        <p>
+            I dette projekt, bruger bruger jeg fs til at læse html filerne.
+        </p>
+        <pre><code>import fs from "fs"
+    export function readPage(path) {
+        return fs.readFileSync(path, "utf-8")
+    }</code></pre>
+        <p>readPage() læser html filen og returnere det som en string. Følgende kode viser, hvordan det sættes sammen:</p>
+       
+    <pre><code>export function constructPage(page, options = {}) {
+    const header = readPage("public/components/header/header.html");
+    const footer = readPage("public/components/footer/footer.html");
+
+    return header.replace("titel-placeholder", options.title) + page + footer;
+}</code></pre>
+        <p>constructPage bruges til sætte det hele sammen, hvor den færdige html side gemmes og kaldes i denne funktion blandt andre, så de kan bruges i app.js: </p>
+        
+        <pre><code>export const javascriptPage = constructPage(javascript, {
+    title: "JavaScript og Clean Code"})</code></pre>
+        
+        <p>app.js sender siden sådan her:</p>
+        
+        <pre><code>import javascriptPage from "./templatingEngine/pages.js"
+            app.get("/javascript", (req,res) => {
+        res.send(javascriptPage)    
+        })</code></pre>
+    </section>
+
+    <section id="ssr-vs-csr">
+        <h2>SSR VS Client Side Rendering</h2>
+        <p>
+            Jeg har lavet denne tabel for at give et overblik over forskellen mellem SSR og Client side rendering:
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>SSR</th>
+                    <th>CSR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hvordan de konstruere siden</td>
+                    <td>Browseren modtager færdig HTML fra serveren.</td>
+                    <td>Browseren skal først hente og køre JavaScript</td>
+                </tr>
+                <tr>
+                    <td>Ressourcer</td>
+                    <td>Serveren bruger ressourcer på at lave HTML for hvert request.</td>
+                    <td>Browseren bruger ressourcer på at lave indholdet.</td>
+                </tr>
+                <tr>
+                    <td>SEO</td>
+                    <td>Indholdet er nemmere at søge op, da keywordsne allerede findes i HTML svaret på google</td>
+                    <td>Indholdet kan først komme frem, når JavaScript er kørt.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section id="cdn">
+        <h3>CDN VS lokale filer</h3>
+        <p>CDN står for content delivery network. Det betyder, at filer som css kan hentes fra en ekstern server i stedet for at ligge lokalt.</p> 
+        <p>Jeg har fx brugt følgende css styling framewrok til dette projekt:</p>
+        <pre><code>link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"</pre></code>
+        <p>En fordel ved at hente det fra en ekstern server, er at man ikke selv skal downloade css filen og gemme den i projektet. Det er nemt at starte med, hvis man bare skal lave en simpel hjemmeside som denne.</p>
+        <p>Til gengæld er man lidt mere i kontrol over filen, hvis man altså vælger at downloade den og lægge den lokalt i projektet. Derudover er hjemmesiden ikke afhængig af en ekstern server.</p>
+    </section>
+</article>

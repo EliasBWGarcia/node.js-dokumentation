@@ -1,0 +1,410 @@
+<article>
+    <h1>JavaScript og datatyper</h1>
+    <h2>Underemner:</h2>
+    <ul>
+        <li><a href="#datatypes">Datatyper og variabler</a></li>
+        <li><a href="#dato-og-tid">Dato og tid</a></li>
+        <li><a href="#const-og-let">Const og let</a></li>
+        <li><a href="#objects">Objekter</a></li>
+        <li><a href="#arrays">Arrays</a></li>
+        <li><a href="#funktioner">Funktioner</a></li>
+        <li><a href="#scope">Scope</a></li>
+        <li><a href="#loop-metoder">Loop-metoder og side effects</a></li>
+        <li><a href="#type-coercion">Type coercion</a></li>
+        <li><a href="#clean-code">Clean code</a></li>
+    </ul>
+
+    <section id="datatypes">
+        <h2>Datatyper</h2>
+
+        <p>I JavaScript (og i andre sprog) findes der forskellige datatyper, som fortæller om hvilken slags værdi en variabel indeholder.
+            For eksempel kan integers bruges til matematiske beregninger, mens strings bruges til tekst. Nedenfor har jeg lavet en liste, der beskriver nogle de forskellige datatyper og en tilhørende beskrivelse:</p>
+        <dl>
+            <dt>String</dt>
+            <dd>En string er en tekst, der skrives i citationstegn.</dd>
+
+            <dt>Number eller integer</dt>
+            <dd>Et number eller integer er tal, der kan bruges til beregninger.</dd>
+
+            <dt>Boolean</dt>
+            <dd>En boolean er enten true eller false. Dette bliver fx. brugt i et if statement</dd>
+
+            <dt>Undefined</dt>
+            <dd>Undefined btyder, at der ikke er nogen værdi at arbejde med. Det kan ske, hvis en varibel er oprettet uden at få assignet en værdi endnu,
+                eller hvis man prøver at hente noget fra et objekt, som ikke findes. eksempel:
+            </dd>
+<pre>
+<code>const username; 
+console.log(username) // undefined</code>
+</pre>
+<pre>
+<code>const user = {name: "Elias"}
+console.log(user.age) // undefined
+</code>
+</pre>
+
+            <dt>Null</dt>
+            <dd>Dette er hvis man bevidst sætter værdien til at være tom.</dd>
+
+            <dt><a href="#objects">Objekt</a></dt>
+            <dd>Dette er en samling af key value pairs. Det kan bruges til at beskrive personer eller andre ting med flere oplysninger, hvor man henter ting fra objektet med dot notation. Klik på titlen for at se mere om objekter</dd>
+
+            <dt><a href="#arrays">Array</a></dt>
+            <dd>Dette er en liste med flere værdier. Det kan for eksempel være en liste med frugter, hvor hvert element har et index, som altid starter ved 0. 
+                Et array kan også indeholde objekter. Klik på titlen for at se mere om arrays
+            </dd>
+        </dl>
+    </section>
+
+    <section id="dato-og-tid">
+        <h2>Dato og tid</h2>
+        <p>JavaScript har et indbygget date objekt. 
+            Dates bliver gemt som integers i form af millisekunder siden 1. januar 1970, og det gør det muligt at beregne tid og dato.
+        </p>
+        <h3>Eksempel med beregning af datoer</h3>
+        <pre><code>const tomorrow = new Date(Date.now() + 1000 * 60 * 60 * 24)</code></pre>
+        <p>Her opretter new Date() et date objekt ud fra det aktuelle tidspunkt. Derefter lægges antallet af millisekunder i et døgn til, så resultatet bliver datoen i morgen.</p>
+        <h3>Eksempel med formatering af datoer</h3>
+        <pre><code>const currentMonth = new Date().toLocaleDateString('en-uk', { month: 'long' });</code></pre>
+        <p>new Date() opretter et date objekt ligesom i forrige eksempel. toLocaleDateString() formaterer datoen som tekst og month: "long" gør at resultatet bliver navnet på den aktuelle måned, man er i.</p>
+    </section>
+
+    <section id="const-og-let">
+        <h2>Variablerne const og let</h2>
+        <p>
+            Variable bruges til at gemme værdier, og i Javascript bruges const og let. 
+        </p>
+        <h3>Const</h3>
+        <p>
+            Const bruges, når værdien ikke skal laves om senere i programmet igen. Derfor bruger man som udgangspunkt altid const for at undgå bugs.
+        </p>
+        <pre><code>const name = "Elias"</code></pre>
+        <h3>Let</h3>
+        <p>
+            Let bruges når en værdi ændres senere i programmet. fx: 
+        </p>
+        <pre><code>let score = 0 <br>score = score + 1
+        </code></pre>
+    </section>
+
+    <section id="objects">
+        <h2>Objekter</h2>
+        <p>
+            Som tidligere nævnt samler et objekt oplysninger om fx. en person i key value pairs. Det giver mening, når flere værdier hører sammen under samme "kategori". Eksempel:
+        </p>
+        <pre><code>const person = {
+            id= 1,
+            name: "Elias"
+            age: 25
+        }</code></pre>
+        <p>
+            i ovenstående eksempel er id, name og age keys, og deres tilhørende values er henholdvis 1, "Elias" og 25.
+        </p>
+
+        <h3>Hvordan henter man et bestemt property fra et objekt?</h3>
+        <pre><code>console.log(person.age) // output: 25</code></pre>
+        <p>Man bruger dot notation for at hente et bestemt property fra et objekt.</p>
+
+        <h3>Ændring af properties i et objekt</h3>
+        <p>
+            Man kan også tilføje eller ændre properties på et allerede eksisterende objekt.
+        </p>
+        <pre><code>person.age = 30;
+person.name = "Jacob"
+person.hobby = "Playing guitar"
+        </code></pre>
+        <p>Her ændres værdien af age og name, og der tilføjes også en ny property, som hedder hobby. Selvom objektet er oprettet med const, 
+            kan man godt ændre objektets properties, dog kan man ikke reassigne et nyt helt nyt objekt til person
+        </p>
+    </section>
+
+
+    <section id="arrays">
+        <h2>Arrays</h2>
+
+        <p>
+            Et array bruges til at gemme flere værdier i samme variabel. alle
+            værdier i arrayet har et index, og det første index er altid index 0.
+        </p>
+
+        <pre><code>const instruments = ["Guitar", "Piano", "Drums"];</code></pre>
+
+        <h3>Hvordan tilgår man værdier i et array?</h3>
+
+        <pre><code>console.log(instruments[0]); // "Guitar"</code></pre>
+        <pre><code>console.log(instruments[1]); // "Piano"</code></pre>
+
+        <p>
+            Square brackets bruges til at hente en værdi ud fra dens index. Det er
+            derfor instruments[0] henter den første værdi i arrayet.
+        </p>
+
+        <h3>Antal værdier i et array</h3>
+
+        <pre><code>console.log(instruments.length); // 3</code></pre>
+
+        <p>
+            Length fortæller, hvor mange elementer eller værdier der findes i arrayet.
+        </p>
+
+        <h3>Et array kan også bestå af objekter</h3>
+        <p>
+            Som tidligere beskrevet, kan et array bruges til at gemme flere værdier i en variabel. Et array kan også indeholde flere objekter, som på nedenstående eksempel:. 
+        </p>
+
+        <pre><code>const guitarCollection = [
+        {id: 1, instrument: "Guitar", type: "Acoustic"},
+        {id: 2, instrument: "Guitar", type: "Electric"}
+        ]</code></pre>
+
+        <p>Herfra kan man hente en bestemt property fra et objekt på arrayet:</p>
+        <pre><code>console.log(guitarCollection[0].type) // "Acoustic"</code></pre>
+        <pre><code>console.log(guitarCollection[1].type) // "Electric"</code></pre>
+
+    </section>
+
+    <section id="funktioner">
+        <h2>Funktioner</h2>
+        <!--function declaration og arrow functions, scope, callback functions --> 
+        <p>
+            En funktion er en blok kode, der kan genbruges flere steder. Det er et stykke kode, der helst kun skal stå for at udføre 1 opgave. 
+            Funktioner kan modtage værdier som parametre og kan returnere et resultat, som evt. kan blive brugt et andet sted i koden. 
+        </p>
+
+        <h3>Hvordan skriver man en funktion?</h3>
+        <pre><code>function getGreeting(name) {
+            return "hej " + name
+        }
+const greeting = getGreeting("Elias")
+console.log(greeting) // output: "Hej Elias"
+        </code></pre>
+
+        <p>Funktionen modtager name som et parameter og returnerer en string. Når funktionen kaldes, bliver argumentet "Elias" brugt som name.</p>
+
+        <h3>Arrow function</h3>
+        <pre><code>const getGreeting = (name) => {
+            return "Hej " + name
+        }</code></pre>
+
+        <p>En arrow function er en anden måde at skrive en funktion på, hvor denne fx. kan logges ved at skrive:</p>
+        <pre><code>console.log(getGreeting("Elias")) // output: "Hej Elias"</code></pre>
+        <p>Man kan også gemme resultatet i en variabel som her:</p>
+        <pre><code>const greeting = getGreeting("Elias")
+        console.log(greeting) // output: "Hej Elias"
+        </code></pre>
+
+        <h3>Callback functions</h3>
+        <p>En callback funktion er når en funktion tager en anden funktion som parameter som i nedenstående eksempel:</p>
+        <pre><code>function performAction(name, action) {
+            return action(name)
+        }
+const playGuitar = (name) => {
+    return name + "like to play guitar"
+}
+console.log(performAction("Elias", playGuitar))
+        </code></pre>
+        <p>Her bliver der lagt to argumenter ind til funktionen performAction, hvor playGuitar er sendt ind som callback og bliver kaldt inde i performAction med argumentet "Elias"</p>
+
+        <section id="scope">
+        <h3>Scope</h3>
+        
+        <p>Scope fortæller om, hvor i koden en variabel er tilgængelig. Der er 3 primære måder at definere scopes på:</p>
+
+        <h4>Global scope</h4>
+        <pre><code>let score = 0
+for (let i = 0; i < 10; i++) {
+    score = score + 1
+}
+        </code></pre>
+        <p>Variablen score i ovenstående eksempel er oprettet uden for loopet og kan derfor tilgås i hele programmet, både inde i loopet og efter loopet, fordi den har global scope.
+            altså, variablen er oprettet uden for nogen funktion og er derfor tilgængelig i hele programmet. </p>
+
+        <h4>Function scope</h4>
+        <pre><code>function convertNoteToHZ(note) {
+        const notes = {
+            A4: 440,
+            C4: 261
+        } 
+        return notes[note]
+    }
+        </code></pre>
+
+        <p>
+            i ovenstående eksempel er notes oprettet inde i funktionen, og kan derfor kun tilgås inde i denne funktion. 
+            Hvis man prøvede at skrive console.log(notes) uden for funktionen, ville man få en reference error, fordi den ikke er defineret i det globale scope.
+            Hvis man vil have resultatet af funktionen, kan man kalde den med følgende:
+        </p>
+        <pre><code>console.log(convertNoteToHZ("A4")) // output: 440</code></pre>
+
+        <h4>Block scope</h4>
+        <p>
+            Block scope ligner lidt det samme som function scope, men de er ikke helt ens, og det kan godt virke forvirrende at kende forskel på de to, men jeg har lavet denne nedenstående funktion for at forklare forskellen:
+        </p>
+        <pre><code>function blockScopeVSFunctionScope() {
+            const functionScope = "denne kan tilgås i hele funktionen inklusiv i if statementet"
+
+            if (true) {
+                const blockScope = "denne kan kun tilgås i if blokken"
+            }
+
+            console.log(functionScope) // denne virker fordi den har function scope
+            console.log(blockScope) // denne virker ikke, fordi den kun kan tilgåes i if statementet.
+        }</code></pre>
+        </section>
+
+    <section id="loop-metoder">
+        <h2>Loops og metoder</h2>
+        <p>
+            Loops bliver brugt til at gennemgå elemeter i et array, hvor man blandt andet kan arbejde med forskellige metoder. Dem vi har gennemgået i undervisningen er map, filter, find og reduce.
+            Det er vigtigt, at man så vidt muligt undgår side effects, som betyder, at man undgår at ændre det oprindelige array, man looper over. I stedet for, kan man returnere et nyt array med de ændringer, man vil have.
+        </p>
+
+        <h3>Map</h3>
+        <p>
+            Map metoden gennemgår alle elemter i et bestemt array og laver en ændring, hvor den returnerer et helt nyt array. Eksempel med instruments fra array afsnittet:
+        </p>
+        <pre><code>const instruments = [
+            {id: 1, instrument: "guitar", type: "acoustic"},
+            {id: 2, instrument: "guitar", type: "electric"}
+            ]
+
+const instrumentTypes = instruments.map((instrument) => {
+    return instrument.type
+})
+
+console.log(instrumentTypes) // output: ["acoustic", "electric"]
+        </code></pre>
+        <p>I ovenstående eksempel gennemgår map hvert objekt i arrayet og henter typen fra objektet, og returnerer et nyt array med resultatet. Det vil sige, at det oprindelige array ikke bliver ændret, og vi undgår side effects</p>
+    
+        <h3>Filter</h3>
+        <p>
+            Filter bruges til (som navnet beskriver), at filtrere et array ud fra en bestemt betingelse. Ligesom map, så returnerer filter et nyt array med de elementer, hvor betingelsen er lig med true. Eksempel med instruments arrayet:
+        </p>
+        <pre><code>const electricInstruments = instrument.filter((instrument) => {
+            return instrument.type === "electric"}
+        )</code></pre>
+        <p>Her bliver arrayet gennemgået med betingelsen om, at typen skal være "electric". Ellers bliver elementet ikke returneret i det nye array, som filter metoden returnerer. På samme måde som map, så ændrer filter i dette eksempel ikke i det oprindelige array, og vi undgår side effects.</p>
+    
+        <h3>Find</h3>
+        <p>
+            I modsætning til filter og map, så returnerer find ikke et nyt array. I stedet for, får man det første element i et array, som opfylder betingelsen. Eksempel er:
+        </p>
+        <pre><code>Const getGuitar = instruments.find((instrument) => {
+            return instrument.instrument === "guitar"    
+        })</code></pre>
+        <p>
+            I ovenstående eksempel, gennemgår find metoden instruments arrayet, indtil den finder det første element, der opfylder betingelsen og returnerer resultatet. Hvis ikke den finder noget, får man undefined.
+        </p>
+
+        <h3>FindIndex</h3>
+        <p>
+            Hvis man vil finde et specifik index i et array, kan man bruge FindIndex metoden til at finde et elements placering ud fra en betingelse. 
+            FindIndex stopper med at iterere over arrayet, når det finder det første element, der opfylder betingelsen. Ligesom i Find metoden. Eksempel på FindIndex:
+        </p>
+        <pre><code>const electricGuitarIndex = instruments.findIndex((instrument) => {
+            return instrument.type === "electric"    
+        })</code></pre>
+        <p>
+            Her ville der blive returneret 1, da "electric" ligger på index 1. Hvis ingen af elementerne opfylder betingelsen, vil der blive returneret -1. 
+        </p>
+
+        <h3>Reduce</h3>
+        <p>
+            Reduce kan bruges til at lægge alle tal sammen i et array. Eksempel:
+        </p>
+        <pre><code>const numbers = [10, 20, 30]
+            const totalNumber = numbers.reduce((runningTotal, number) => {
+                return runningTotal + number
+            }, 0)
+        </code></pre>
+        <p>Her gennemgår reduce arrayet og holder styr på værdien i runningTotal (som starter på 0, hvilket er angivet efter callback funktionen). Reduce tager altså imod to argumenter: en callback funktion og en startværdi. 
+            Første gang reduce itererer over arrayet, bliver 0 og 10 lagt sammen, og derefter bliver 10 og 20 lagt sammen osv.
+        </p>
+
+        <h3>ForEach loop</h3>
+        <p>
+            Et forEach loop metoden kan godt sammenlignes med et almindeligt for loop, fordi den også gennemgår elementerne i arrayet en efter en. Forskellen er, at i for loopet kan man selv styre start, slut og tælleren. 
+            Med forEach bliver alle elementer i arrayet gennemgået en gang. I undervisningen har vi lært at bruge map, hvis vi skal bruge dataen bagefter, og forEach hvis vi fx skal logge hvert element i konsollen. 
+            man kan også bruge forEach til fx. at rendere en liste i HTML for hvert element i arrayet. Eksempel med at logge til konsollen:
+        </p>
+        <pre><code>const instruments = ["guitar", "piano"]
+            instruments.forEach((instrumet) => {
+                console.log(instrument)
+            }) // output: "guitar" "piano"
+        </code></pre>
+        <p>Her bliver der altså skrevet til konsollen for hvert element i arrayet.</p>
+
+        <h3>Side effects / mutation</h3>
+        <p>
+            En side effect betyder, at elementerne i et oprindeligt array bliver ændret. Det forsøger man så vidt muligt at undgå, så det oprindelige array stadig kan bruges bagefter, uden at den er blevet ændret. Følgende er et eksempel på side effect:.
+        </p>
+        <pre><code>const numbers = [1,2,3,4]
+            for (let i = 0; i < numbers.length; i++) {
+                numbers[i] = numbers[i] + 1
+            }
+        console.log(numbers) // output: [2,3,4,5]
+        </code></pre>
+        <p>Her bliver hvert element i numbers arrayet ændret og efter loopet er kørt færdigt, er det oprindelige array ikke længere 1,2,3,4. Man undgår denne mutation / side effect ved at bruge map metoden, som laver et nyt array og gør det oprindelige array uændret.</p>
+    </section>
+        
+     <section id="type-coercion">
+        <h2>Type coercion</h2>
+        <p>
+            Type coercion betyder at Javascript automatisk omdanner en værdi fra en datatype til en anden. Fx: 
+        </p>
+        <pre><code>const price = "10" <br> console.log(`${price}`+ 5) // output "105"</code></pre>
+        <p>I ovenstående eksempel bliver 5 automatisk konverteret til en string af Javascript. 
+            Det vil sige, at værdierne bliver sat sammen som tekst i stedet for at blive lagt sammen, som måske kunne være hensigten. Derfor skal man være opmærksom på, hvilken datatype, man arbejder med.
+            Hvis man gerne vil kunne lave matematiske beregninger, skal datatypen være number, hvilket man kan bruge Number metoden til som eksemplet her:</p>
+        <pre><code>const priceAsNumber = Number(price) <br> console.log(priceAsNumber + 5) // output: 15</code></pre>
+
+        <h3>Srict equality</h3>
+        <p>
+            Når man sammenligner to værdier, kan man enten bruge ==, ===, != eller !==. 
+        </p>
+        <dl>
+            <dt>==</dt>
+            <dd>denne sammenligner værdierne og javascript konverterer automatisk datatyperne, ligesom vi så i forrige eksempel med price</dd>
+
+            <dt>===</dt>
+            <dd>denne operator sammenligner både værdi og datatypen, og begge skal være ens, før den er true.</dd>
+
+            <dt>!=</dt>
+            <dd>Denne bruges til at finde ud af, om to værdier ikke er ens. Denne fungerer på samme måde som ==, hvor værdierne bliver automatisk konverteret af javascript.</dd>
+
+            <dt>!==</dt>
+            <dd>Denne har samme princip som ===, hvor den både sammenligner værdi og datatype, og finder ud af, om to værdier ikke er ens. Her bliver der ikke automatisk konverteret af javascript.</dd>
+        </dl>
+        <p>For at konkludere, kan man som tommelfinger regel altid vælge at bruge === og !==, så der ikke automatisk bliver konverteret datatyper. Det er også med til at formindske bugs i koden.</p>
+    </section>
+
+     <section id="clean-code">
+        <h2>Clean code</h2>
+        <p>
+            Clean code er vigtigt, da det handler om at skrive kode, der gør det nemt for sig selv (og for andre udviklere) at læse og forstå koden. 
+            Det betyder bl.a, at man skal sørge for at bruge nogle gode og beskrivende navne til sine variabler og funktioner. Derudover skal man forsøge at dele koden op i mindre funktioner og undgå at gentage sig selv for meget og genbruge kode, hvor man kan.
+        </p>
+        <h3>Navne til variabler og funktioner</h3>
+        <p>Som nævnt skal variabler og funktioner have navne, som forklarer tydeligt, hvad de gør eller indeholder. Eksempel:</p>
+        <pre><code>const x = 100</code></pre>
+        <p>Koden ovenfor er svær at gennemskue, hvad den indeholder, da navnet ikke siger noget om, hvad den indeholder. Man kunne i stedet for gøre sådan her:</p>
+        <pre><code>const price = 100</code></pre>
+        <p>I det her simplificeret eksempel, kan man hurtigt se hvad variablen indeholder.</p>
+        <h3>Funktioner skal være opdelte og have et ansvar</h3>
+        <p>Hvis en funktion kun har en enkelt opgave at tage sig af, er det nemmere at forstå og genbruge. fx:</p>
+        <pre><code>const addNumbers = (a,b) => {
+            return a + b
+        }</code></pre>
+        <p>Her står funktionen for et ansvar og navnet fortæller hvad den gør.</p>
+
+        <h3>Strict mode</h3>
+        <p>
+            Man kan godt sammenligne strict mode lidt med en linter. De er begge to med til at understøtte clean code, da de for eksempel giver fejl, hvis man prøver at oprettet en variabel som dette:
+        </p>
+        <pre><code>number = 10</code></pre>
+        <p>Hvis man bruger strict mode, vil dette give fejl, fordi man ikke har oprettet variablen med const eller let.</p>
+        <p>Man slår strict mode til ved at skrive "use strict" i sin fil. I ES modules er strict mode slået til automatisk, men i commonJS er det ikke slået til.</p>
+    </section>
+
+ 
+</article>

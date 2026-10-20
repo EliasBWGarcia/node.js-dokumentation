@@ -1,0 +1,126 @@
+<article>
+    <h3>Konfiguration og filer</h3>
+
+    <ul>
+        <li><a href="#filer">Statiske filer og express.static()</a></li>
+        <li><a href="#es-modules">ES Modules i Node.js</a></li>
+        <li><a href="#commonjs-vs-esmodules">CommonJS VS ES Modules</a></li>
+        <li><a href="#env-var">Environment variables og process.env</a></li>
+        <li><a href="#redirection">Client side og server side redirection</a></li>
+        <li><a href="#projektstruktur">Projektstruktur</a></li>
+    </ul>
+
+    <section id="filer">
+        <h2>Statiske filer og express.static()</h2>
+        <p>
+            Statiske filer er filer, som browseren skal kunne hente direkte fra serveren. Det kan for eksempel være CSS filer og JavaScript-filer til frontenden. 
+        </p>
+
+        <pre><code>app.use(express.static("public"));</code></pre>
+
+        <p>
+            Denne linje gør at Express kan sende filer fra public mappen til browseren. Hvis en CSS fil ligger i public/assets/css/index.css, kan den bruges i en HTML fil med følgende sti:
+        </p>
+
+        <pre><code>link rel="stylesheet" href="/assets/css/index.css"</code></pre>
+
+        <p>
+            Det er også for sikkerhedsmæssige årsager, da det kun er filer i public mappen som kan hentes direkte fra browseren. Serverfiler som app.js og package.json skal ikke ligge i public, fordi brugere ikke skal selvfølgelig ikke have adgang til dem.
+        </p>
+    </section>
+
+    <section id="es-modules">
+        <h3>ES modules</h3>
+        <p>
+            Man kan eksportere en funktion eller variabel fra en fil til en anden, hvis man importerer den.
+        </p>
+        <p>
+            Eksempel på en fil, der eksporterer en funktion:
+        </p>
+        <pre><code>export function getexample(example) {
+        return "Hej" + example;
+        }</code></pre>
+        <p>
+            Funktionen kan derefter importeres i en anden fil:
+        </p>
+        <pre><code>import {getExample} from "./example.js"
+            console.log(getExample("eksempel på eksport/import"))
+        </code></pre>
+        <p>
+            For at bruge ES Modules i Node.js skal man skrive type: "module" i package.json. Det gør det muligt at bruge import og export i projektets JavaScript-filer.
+        </p>
+    </section>
+
+    <section id="commonjs-vs-esmodules">
+        <h3>CommonJS VS ES Modules</h3>
+        <p>
+            CommonJS bruger require() og module.exports og ES Modules bruger import og export. Ifølge vores undervisning er ES Modules den nye standard.
+        </p>
+
+        <p>
+            I Node.js aktiveres ES Modules ved at skrive type: "module" i package.json.
+        </p>
+        </section>
+
+    <section id="env-var">
+        <h3>Environment variables</h3>
+        <p>
+            Dette er værdier, som sættes uden for selve Javascript koden. I undervisningen har vi brugt dem til at bestemme, hvilken port serveren skal køre på. 
+        </p>
+        <pre><code>"scripts": {
+        "start": "cross-env PORT=80 node app.js",
+        "start-dev": "cross-env PORT=9090 nodemon app.js"
+    },</code></pre>
+        <p>Her sætter cross-env værdien PORT før node.js overhovedet starter app.js, så når man kører npm run start-dev, bliver porten sat til 9090.</p>
+        <pre><code>const PORT = process.env.PORT
+            app.listen(PORT)
+        </code></pre>
+        <p>Her bliver værdien hentet fra env variables.</p>
+        <p>Man kan også gemme env variables i en .env fil, men den må ikke pushes til Github og skal stå i gitignore, hvis der er andre passwords eller api nøgler.</p>
+    </section>
+
+    <section id="redirection">
+        <h3>
+            Client side og server side redirection
+        </h3>
+        <p>
+            redirection betyder, at brugeren bliver sendt hen til en anden URL. Ved server side, er det serveren der bestemmer, hvor clienten skal sendes hen. Ved client side er det browseren, der står for at skifte url.
+        </p>
+        <h3>Server side</h3>
+        <pre><code>app.get("/chatterroom", (req, res) => {
+        res.redirect("/blablabla")    
+        })</code></pre>
+        <p>
+            Her i dette eksempel fra undervisningen, besøger clienten først /chatterroom, men så sender severen et response tilbage, som sender browseren videre til /blablabla
+        </p>
+        <h3>Client side</h3>
+        <p>Ved client side redirection er det Javascript i browseren, der ændrer på url'en. Det er ikke noget, vi har haft kodemæssigt om i undervisning, men det ser sådan her ud:</p>
+        <pre><code>window.location.href="/blablabla"</code></pre>
+    </section>
+
+    <section id="projektstruktur">
+        <h2>Projektstruktur</h2>
+        <p>
+           Det giver mening at strukturere sit projekt i mapper, så det bliver nemmere for andre udviklere (og en selv) at finde rundt i.        
+        </p>
+
+        <pre><code>public/
+        assets/
+            css/
+            images/
+        components/
+            header/
+            footer/
+        pages/
+
+templatingEngine/
+    pages.js
+    templatingEngine.js
+
+app.js/</code></pre>
+
+        <p>
+            I dette projekt ligger CSS, billeder i assets. Siderne ligger i pages, og headeren og footeren ligger i components, fordi de bruges på flere sider. app.js og templatingEngine ligger uden for public, fordi de bruges på serveren
+        </p>
+</section>
+</article>

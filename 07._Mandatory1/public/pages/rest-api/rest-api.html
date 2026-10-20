@@ -1,0 +1,176 @@
+<article>
+    <h1>Rest API og CRUD</h1>
+    <ul>
+        <li><a href="#rest-api">Hvad er et REST API</a></li>
+        <li><a href="#konventioner">Konventioner</a></li>
+        <li><a href="crud-og-http">CRUD og HTTP-metoderne</a></li>
+        <li><a href="#get">GET</a></li>
+        <li><a href="#post">POST</a></li>
+        <li><a href="#patch">PATCH</a></li>
+        <li><a href="#delete">DELETE</a></li>
+        <li><a href="#statuskoder">Statuskoder</a></li>
+    </ul>
+
+    <section id="rest-api">
+        <h2>Hvad er et REST API?</h2>
+        <p>
+            Man gør det muligt for clienten at bruge http til at arbejde med data. I undervisningen har vi bl.a. lavet et API med animals, hvor man kan hente, oprette, opdatere og slette dyr.
+        </p>
+        <p>
+            Et REST API består af endpoints (url'er).
+        </p>
+    </section>
+
+    <section id="konventioner">
+        <h3>Konventioner</h3>
+        <p>
+            I undervisningen har vi arbejdet med konventioner af REST API'er, så det er nemt for andre (og en selv) at læse og forstå koden. 
+        </p>
+        <ol>
+            <li>Endpoints skal stå i en specifik rækkefølge, når man skriver koden. Rækkefølgen er følgende: GET, POST, PUT, PATCH og DELETE</li>
+            <li>Endpoints skal navngives med navneord i flertal.</li>
+        </ol>
+        
+    </section>
+
+    <section id="crud-og-http">
+        <h3>CRUD og http metoder</h3>
+        <p>CRUD er en forkortelse for alle de handlinger man kan lave i et REST API. Her har jeg lavet en tabel for at få et overblik:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>CRUD</th>
+                    <th>HTTP metode</th>
+                    <th>Eksempel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Create</td>
+                    <td>POST</td>
+                    <td>POST /animals</td>
+                </tr>
+                <tr>
+                    <td>Read</td>
+                    <td>GET</td>
+                    <td>GET /animals</td>
+                </tr>
+                <tr>
+                    <td>Update</td>
+                    <td>PATCH</td>
+                    <td>PATCH /animals/:id</td>
+                </tr>
+                <tr>
+                    <td>Delete</td>
+                    <td>DELETE</td>
+                    <td>DELETE /animals/:id</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </section>
+
+    <section id="get">
+        <h3>GET (read)</h3>
+        <p>
+            GET bruges til at hente data. Her er der et eksempel: 
+        </p>
+        <pre><code>app.get("/animals", (req, res) => {
+        res.send({data: animals})    
+        })</code></pre>
+       <p>Hvis man gerne vil hente et bestemt dyr, i stedet for bare at modtage alt dataen, så kan man gøre sådan her:</p>
+        <pre><code>app.get("/animals/:id", (req, res) => {
+    const providedId = Number(req.params.id)
+
+    const foundAnimal = animals.find((animal) => {
+        return animal.id === providedId
+    })
+})
+    res.send({ data: foundAnimal });</code></pre>
+    <p>Her i ovenstående eksempel fra undervisningen, er ID et path parameter. 
+        ID'et kommer som string, så derfor bruger man Number() til at konverte værdien til et tal. Herefter bruges find() til at finde det dyr i arrayet. der har id'et 1.</p>
+    </section>
+
+    <section id="post">
+        <h3>POST (create)</h3>
+        <p>
+            Man kan oprette ny data på serveren med et POST request. Men det skal være i JSON format i bodyen, og det kan man sørge for at gøre, ved at skrive følgende linje kode før man skal sit REST API:
+        </p>
+        <pre><code>app.use(express.json())</code></pre>
+
+        <pre><code>app.post("/animals", (req, res) => {
+    const providedAnimal = req.body;
+
+    providedAnimal.id = nextId++;
+
+    animals.push(providedAnimal);
+
+    res.send({ data: providedAnimal });
+});</code></pre>
+
+        <p>Clienten sender et post request til serveren, og opdaterer arrayet med et nyt dyr.</p>
+
+    </section>
+
+    <section id="patch">
+        <h3>Patch (Update)</h3>
+        <p>I et patch request opdaterer man data på serveren. Eksempel fra undervisningen, hvor vi opdaterer et dyr på en specifik placering (vha id) på animals arrayet:</p>
+        <pre><code>app.patch("/animals/:id", (req, res) => {
+    const providedId = Number(req.params.id);
+    const foundAnimalIndex = animals.findIndex((animal) => animal.id === providedId);
+
+    if (foundAnimalIndex === -1) {
+       return res.status(404).send({ errorMessage: `No animal found by id ${providedId}` });
+    }
+
+    const providedAnimal = req.body;
+    const foundAnimal = animals[foundAnimalIndex];
+
+    const animalToUpdate = { ...foundAnimal, ...providedAnimal, id: providedId };
+
+    animals[foundAnimalIndex] = animalToUpdate;
+
+    res.send({ data: animalToUpdate });
+});</code></pre>
+    <p>
+        Her har jeg lavet en ændring ift undervisningens kode. Jeg har ændret animalToCreate til animalToUpdate, da vi altså ikke opretter noget på serveren, men opdatere i stedet for.
+    </p>
+    </section>
+
+    <section id="delete">
+        <h3>Delete</h3>
+        <p>Et delete request sletter data på serveren. Eksempel fra undervisningen, hvor id'et bliver brugt til at finde et dyr at slette:</p>
+        <pre><code>app.delete("/animals/:id", (req, res) => {
+    const providedId = Number(req.params.id);
+    const foundAnimalIndex = animals.findIndex((animal) => animal.id === providedId);
+
+    if (foundAnimalIndex === -1) {
+       return res.status(404).send({ errorMessage: `No animal found by id ${providedId}` });
+    }
+
+    animals.splice(foundAnimalIndex, 1);
+
+    res.status(204).send();
+});</code></pre>
+
+    </section>
+
+    <section id="statuskoder">
+        <h3>Statuskoder</h3>
+        <p>Serveren sender et response tilbage med en statuskode. Kort overblik over nogle af de vigtigte:</p>
+        <dl>
+            <dt>200</dt>
+            <dd>Requestet virkede</dd>
+
+            <dt>204</dt>
+            <dd>Requestet virkede, men der bliver ikke sendt noget tilbage fra serveren</dd>
+
+            <dt>404</dt>
+            <dd>Serveren kunne ikke finde det, der blev requestet om (ses også i delete eksemplet ovenfor)</dd>
+        </dl>
+
+    </section>
+
+
+</article>

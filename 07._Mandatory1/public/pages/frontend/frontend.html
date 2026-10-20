@@ -1,0 +1,69 @@
+<article>
+    <h1>Fetch og XSS</h1>
+    <ul>
+        <li><a href="#fetch">Hvad er fetch?</a></li>
+        <li><a href="#get-med-fetch">GET med fetch</a></li>
+        <li><a href="#res-json">Hvordan fungerer response og JSON?</a></li>
+        <li><a href="#xss">Hvad er XSS?</a></li>
+        <li><a href="#sanitizing">Sanitizing på backend</a></li>
+    </ul>
+
+    <section id="fetch">
+        <h3>Hvad betyder det at fetche?</h3>
+        <p>
+            Fetch bruges af clienten til at sende http requests til serveren. Kig eventuelt i client-server modellen under express siden. Syntaksen
+        </p>
+    </section>
+
+    <section id="get-med-fetch">
+        <h3>GET med fetch</h3>
+        <p>GET request er en "default", når man bruger den indbyggede funktion fetch i Javascript. Så selvom man ikke skriver en http metode, så bliver det et get request automatisk:</p>
+        <pre><code>fetch("/animals")
+    .then((response) => response.json())
+    .then((result) => {
+        console.log(result)
+    })</code></pre>
+        <p>Her bliver der sendt et GET request afsted til endpointet /animals. Responset bliver lavet om til JSON.</p>
+
+    </section>
+
+    <section id="res-json">
+        <h3>Hvordan fungerer response og JSON?</h3>
+            <p>
+                Når fetch sender et request, får man et response tilbage. Dette er bl.a. statuskoden og den data, fetch requestet har ønsket.
+            </p>
+            <p>
+                Dataen bliver sendt som JSON, når man laver det om fra tekst til JSON format med response.json()
+            </p>
+
+    </section>
+
+    <section id="xss">
+        <h3>Hvad er XSS?</h3>
+        <p>
+            Det er cross-site scripting. Det er hvor nogen prøver at sende HTML eller Javascript ind på en hjemmeside, som browseren behandler som kode og kører.
+        </p>
+        <p>
+            Det kan ske, hvis man eksempelvis bruger .innerHTML på noget bruger input. Brugeren kan her få lov til at indsætte både HTML og javascript i koden.
+        </p>
+        <p>Hvis man i stedet bruger .textcontent, bliver inputtet vist som tekst, og browseren prøver ikke at køre noget fra brugerens input.</p>
+    </section>
+
+    <section id="sanitizing">
+        <h3>Sanitizing på backend</h3>
+        <p>
+            Sanitizing betyder at man ændre tegn, som en bruger kan finde på at sende ind til ens hjemmeside. Selvom man bruger .textContent på ens hjemmeside, skal man stadig være forsigtig og ændre de tegn, som browseren kan opfatte som html. I undervisningen har vi brugt følgende til netop dette:
+        </p>
+        <pre><code>export function sanitizeXSS(string) {
+    return string
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;')
+        .replaceAll('`', '&#x60;')
+        .replaceAll('/', '&#x2F;');
+}</code></pre>
+
+    </section>
+</article>
